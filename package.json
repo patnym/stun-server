@@ -1,0 +1,15 @@
+{
+  "name": "nyman-stun",
+  "version": "0.0.1",
+  "description": "Web based API that stores IPs to allow me to connect to my home server without a static IP",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Patrik Nyman",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2"
+  }
+}
