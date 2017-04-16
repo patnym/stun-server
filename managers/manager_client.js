@@ -1,6 +1,9 @@
 //Client model
 const Client = require('../models/model_client');
 
+//Helpers
+const ResponseHelper = require('../helpers/helper_response');
+
 var climan = class ClientManager {
 
     /**
@@ -10,10 +13,8 @@ var climan = class ClientManager {
      * Delete
      */
 
-    //add client
+    //Add client
     createClient(name, token) {
-        console.info("Calling create client");
-
         return new Promise( (resolve, reject) => {
             //Create client
             var client = new Client( { auth: token, name: name } );
@@ -30,12 +31,22 @@ var climan = class ClientManager {
 
     //get client
     getClientById(id) {
+        return new Promise( (resolve, reject) => {
 
+            Client.findById(id, (err, res) => {
+                if(err) {
+                    err.status = 500;
+                    reject(err);
+                } else if(!res) {
+                    var response = ResponseHelper.errorResponse(404, "No client matches input id");
+                    reject(response);
+                } else {
+                    resolve(res);
+                }
+            });
+
+        });
     }
-
-    getClientByName(name) {
-
-    } 
 
     //get clients
     getClients() {

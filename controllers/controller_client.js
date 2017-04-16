@@ -5,22 +5,22 @@ const router = express.Router();
 const Auth = require('../managers/manager_auth');
 const ClientManager = require('../managers/manager_client');
 
+//Helpers
+const ResponseHelper = require('../helpers/helper_response');
+
 //Client model
 const Client = require('../models/model_client');
 
 
 //Register path - Will create a new client and save to allow future pings
 //Later this should be placed in a queue
-router.post("/api/register", (req, res) => {
-    console.log("/api/register called name: ", req.body.name);
-
+router.post("/api/client", (req, res) => {
+    console.log("/api/register called name: ", req.body.name);  
     ClientManager.createClient(req.body.name, Auth.generateToken())
         .then( (client) => {
-            console.log("Successfully created client", client);
-            res.send( { token: client.auth } );
+            res.send(ResponseHelper.jsonResponse(client));
         }).catch( (reason) => {
-            console.error(reason);
-            res.status(500).send(reason);
+            res.status(500).send(Responsees.jsonResponse(null, reason));
         });
 });
 
@@ -29,26 +29,20 @@ router.post("/api/register", (req, res) => {
 //token
 //ip
 //port
-router.put("/api/ping", (req, res) => {
+router.put("/api/client", (req, res) => {
     console.log("/api/ping called ")
 });
 
 //Get client by id path
-router.get("/api/getclient/id/:id", (req, res) => {
-    console.log("/api/getclient/id/:id called id: ", req.params.id);
-
-    Client.find({ _id: req.params.id }, (err, client) => {
-        if(err) {
-            res.status(500).send(err);
-            return console.error(err);
-        } else if( client.length === 0) {
-            res.status(500).send( { message: "Client not found" } );
-            return console.warn("Client not found");
-        }
-
-        console.log("Client found");
-        res.send( { client: client[0] } );
-    });
+router.get("/api/client/:id", (req, res) => {
+    console.log("/api/client/id/:id called id: ", req.params.id);
+    ClientManager.getClientById(req.params.id)
+        .then( (client) => {
+            res.send(ResponseHelper.jsonResponse(client));
+        }).catch( (reason) => {
+            console.error(reason);
+            res.status(reason.status).send(ResponseHelper.jsonResponse(null, reason.name));
+        });
 });
 
 //Get clients path
@@ -65,24 +59,6 @@ router.get("/api/getclients", (req, res) => {
         }
 
         res.send( { clients: clients } );
-    });
-});
-
-//Get client by name path - Used for debugging purposes atm
-router.get("/api/getclient/name/:name", (req, res) => {
-    console.log("/api/getclient/name called name: ", req.params.name);
-
-    Client.find({ name: req.params.name }, (err, client) => {
-        if(err) {
-            res.status(500).send(err);
-            return console.error(err);
-        } else if( client.length === 0) {
-            res.status(500).send( { message: "Client not found" } );
-            return console.warn("Client not found");
-        }
-
-        console.log("Client found");
-        res.send( { client: client[0] } );
     });
 });
 
