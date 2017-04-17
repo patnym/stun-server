@@ -1,10 +1,37 @@
 
 var auth = class AuthorazatitonManager {
 
-    //TODO: This should later generate a random token for some unthgought through reason!
+    //Generate a token used to save clients
     generateToken() {
         return "1234";
     }
+
+    //Create, read, update, delete
+    createUser(username, password) {
+
+    }
+
+    //Get a user
+    getUser(username) {
+
+    }
+
+    //Get all users
+    getUsers() {
+
+    }
+
+    //Remove user
+    removeUser(id) {
+
+    }
+
+    //Returns a jwt token if authenticated
+    authenticateUser(username, password) {
+
+    }
+
+
 
 };
 

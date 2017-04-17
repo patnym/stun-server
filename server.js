@@ -16,12 +16,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
  * Setup routes
  */
 const client_routes = require('./controllers/controller_client');
+const auth_routes = require('./controllers/controller_auth');
 
 //Register all unauthorized paths
 app.use(client_routes.unauthorizedRoute);
+app.use(auth_routes.unauthorizedRoute);
 
 //Middleware
-
+console.log(auth_routes.middleware);
+app.use(auth_routes.middleware);
 
 //Register all authorized paths
 app.use(client_routes.authorizedRoute);

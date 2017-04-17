@@ -82,6 +82,7 @@ router.unauthorizedRoute.put("/api/ping", (req, res) => {
 
     //Validate token
 
+
     //Update
     ClientManager.updateClientById(req.body.id,
         {   ip: req.body.ip })
