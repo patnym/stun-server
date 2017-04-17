@@ -15,7 +15,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 /**
  * Setup routes
  */
-app.use(require('./controllers/controller_client'));
+const client_routes = require('./controllers/controller_client');
+
+//Register all unauthorized paths
+app.use(client_routes.unauthorizedRoute);
+
+//Middleware
+
+
+//Register all authorized paths
+app.use(client_routes.authorizedRoute);
 
 /**
  * Setup DB connection
