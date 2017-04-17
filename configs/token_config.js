@@ -1,6 +1,6 @@
 const config = {
-    payload: "1234",
-    key: "patnym"
+    payload: "user",
+    key: process.env.JWT_KEY || "testkey"
 };
 
 module.exports = config;
