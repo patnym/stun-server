@@ -77,7 +77,7 @@ router.authorizedRoute.delete("/api/client/:id", (req, res) => {
 });
 
 //Ping route, this is where clients ping to register new IP's
-router.unauthorizedRoute.put("/api/ping", (req, res) => {
+router.unauthorizedRoute.post("/api/ping", (req, res) => {
     console.log("/api/ping/:id/:token called params: ", req.body);
 
     //Validate token

@@ -23,11 +23,11 @@ app.use(client_routes.unauthorizedRoute);
 app.use(auth_routes.unauthorizedRoute);
 
 //Middleware
-console.log(auth_routes.middleware);
 app.use(auth_routes.middleware);
 
 //Register all authorized paths
 app.use(client_routes.authorizedRoute);
+app.use(auth_routes.authorizedRoute);
 
 /**
  * Setup DB connection
