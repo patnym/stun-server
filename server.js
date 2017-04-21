@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
  */
 const client_routes = require('./controllers/controller_client');
 const auth_routes = require('./controllers/controller_auth');
+const error_middleware = require('./helpers/helper_route_middleware');
 
 //Register all unauthorized paths
 app.use(client_routes.unauthorizedRoute);
@@ -28,6 +29,9 @@ app.use(auth_routes.middleware);
 //Register all authorized paths
 app.use(client_routes.authorizedRoute);
 app.use(auth_routes.authorizedRoute);
+
+//Error middleware
+app.use(error_middleware);
 
 /**
  * Setup DB connection
