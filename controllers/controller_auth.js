@@ -1,4 +1,5 @@
 const express = require('express');
+const app = express();
 const jwt = require('jsonwebtoken');
 const jwt_config = require('../configs/token_config');
 
@@ -7,57 +8,101 @@ const AuthManager = require('../managers/manager_auth');
 
 //Helpers
 const ResponseHelper = require('../helpers/helper_response');
+const UserHelper = require('../helpers/helper_user');
 
 const router = {};
 router.middleware = express.Router();
 router.unauthorizedRoute = express.Router();
 router.authorizedRoute = express.Router();
 
-//Create
-router.unauthorizedRoute.post("/api/user", (req, res) => {
+/**
+ * @api {post} /api/user Register a new user
+ * @apiName Register User
+ * @apiGroup User
+ *
+ * @apiPermission none
+ * 
+ * @apiParam {String} username Users unique username
+ * @apiParam {String} password Users unique password
+ *
+ * @apiSuccess {User} user User object
+ */
+router.unauthorizedRoute.post("/api/user", (req, res, next) => {
     console.log("post /api/user called with params: ", req.body);
 
     AuthManager.createUser(req.body.username, req.body.password)
         .then( (user) => {
-            res.send(ResponseHelper.jsonMessage("User successfully registered"));
+            res.json(UserHelper.removeSensitiveUserData(user));
         }).catch( (reason) => {
-            res.status(reason.status).send(ResponseHelper.jsonError(reason.name));
+            next(reason);
         });
 });
 
-//Log in
-router.unauthorizedRoute.post("/api/login", (req, res) => {
+/**
+ * @api {post} /api/login Login user
+ * @apiName Log in
+ * @apiGroup User
+ *
+ * @apiPermission none
+ * 
+ * @apiParam {String} username Users unique username
+ * @apiParam {String} password Users unique password
+ *
+ * @apiSuccess {JasonWebToken} Unique authentication token.
+ * @@apiSuccessExample {json} Success-Response:
+     {
+         "message": "",
+         "error": "",
+         "payload":
+         {
+            token: "123456789abcdefghijklmnopqrstuvwxyz"
+         }
+     }
+ */
+router.unauthorizedRoute.post("/api/login", (req, res, next) => {
     console.log("post /api/login called");
 
     AuthManager.authenticateUser(req.body.username, req.body.password)
         .then( (token) => {
-            res.send(ResponseHelper.jsonPayload(token));
+            res.json(token);
         }).catch( (reason) => {
-            res.status(reason.status).send(ResponseHelper.jsonError(reason.name));
+            next(reason);
         });
 });
 
-//Get user
-router.authorizedRoute.get("/api/user/:username", (req, res) => {
+/**
+ * @api {get} /api/user/:username?token=:token Get a user by name
+ * @apiName GetUser
+ * @apiGroup User
+ *
+ * @apiPermission admin
+ * 
+ * @apiParam {String} Username Users unique username
+ * @apiParam {JasonWebToken} Unique authentication token
+ *
+ * @apiSuccess 
+ */
+router.authorizedRoute.get("/api/user/:username", (req, res, next) => {
     console.log("get /api/user/:username called username: ", req.params);
 
     AuthManager.getUser(req.params.username)
         .then( (user) => {
-            res.send(ResponseHelper.jsonPayload(user.username));
+            res.json(UserHelper.removeSensitiveUserData(user, true));
         }).catch( (reason) => {
-            res.status(reason.status).send(ResponseHelper.jsonError(reason.name));
+            console.log("YO");            
+            next(reason);
         });
 });
 
 //Get users
-router.authorizedRoute.get("/api/users", (req, res) => {
+router.authorizedRoute.get("/api/users", (req, res, next) => {
     console.log("get /api/users called");
 
     AuthManager.getUsers()
         .then( (users) => {
-            res.send(ResponseHelper.jsonPayload(users));
+            res.json(UserHelper.removeMultipleSensitiveUserData(users, true));
         }).catch( (reason) => {
-            res.status(reason.status).send(ResponseHelper.jsonError(reason.name));
+            next(reason);
         });
 });
 
@@ -65,34 +110,32 @@ router.authorizedRoute.get("/api/users", (req, res) => {
 router.authorizedRoute.put("/api/user", (req, res) => {
     console.log("put /api/user called params: ", req.body);
     //NOT IMPLEMENTED
-    res.status(501).send(ResponseHelper.jsonError("User update isnt implmented yet"));
+    res.status(501).send({error: "User update isnt implmented yet"});
 });
 
 //Delete user
 router.authorizedRoute.delete("/api/user", (req, res) => {
     console.log("delete /api/user called params: ", req.body);
     //NOT IMPLEMENTED
-    res.status(501).send(ResponseHelper.jsonError("User delete isnt implmented yet"));
+    res.status(501).send({error: "User delete isnt implmented yet"});
 });
 
 //Middleware token validation
 router.middleware = (req, res, next) => {
-    console.log("validation middleware used");
     const token = req.body.token || req.params.token || req.query.token;
 
     if(token){
         try {
             const decoded = jwt.verify(token, jwt_config.key);
             if(decoded === jwt_config.payload) {
-                //Good token, continue!
                 console.log("Authorization granted");
                 next();
             }
         } catch (err) {
-            res.status(401).send(ResponseHelper.jsonError(err.name));
+            next(err);
         }
     } else {
-        res.status(400).send(ResponseHelper.jsonError("No token in request"));
+        next(ResponseHelper.errorResponse(400, "No token in request"));
     }
 }
 

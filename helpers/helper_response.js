@@ -17,9 +17,8 @@ var responses = class ResponseHelper {
         return this.jsonResponse(message, null, payload);
     }
 
-    //Internal error response
-    errorResponse(status, name, message) {
-        return { status: status, name: name, message: message || ''};
+    errorResponse(status, name, message, err) {
+        return { status: status, name: name, message: message || '', err: err || '' };
     }
 }
 

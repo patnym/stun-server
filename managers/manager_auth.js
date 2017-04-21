@@ -40,7 +40,7 @@ var auth = class AuthorazatitonManager {
                                 console.error(err);
                                 reject(ResponseHelper.errorResponse(500, err.name));
                             } else {
-                                resolve(user.username);
+                                resolve(user);
                             }
                         });
                     }
@@ -79,7 +79,7 @@ var auth = class AuthorazatitonManager {
                 } else if(users.length === 0) {
                     console.log("No users found");
                     reject(ResponseHelper.errorResponse(501, "No users exist"));
-                } else {qhDekJ8URrgDwMuQDHnIkrDtnpo
+                } else {
                     resolve(users);
                 }
             });
@@ -118,7 +118,6 @@ var auth = class AuthorazatitonManager {
     }
 
     //Returns a jwt token if authenticated
-    //NOTE: This is not 100% safe as we could potentially measure the time if a username is not found vs if password doesnt match
     authenticateUser(username, password) {
         return new Promise( (resolve, reject) => {
             //Get password from database
@@ -133,7 +132,7 @@ var auth = class AuthorazatitonManager {
                             console.info("Bad password");
                             reject(ResponseHelper.errorResponse(422, "Bad credentials"));
                         } else {
-                            resolve(ResponseHelper.jsonPayload( { token: jwt.sign(jwt_config.payload, jwt_config.key) } ));
+                            resolve( { token: jwt.sign(jwt_config.payload, jwt_config.key) } );
                         }
                     });                
                 }).catch( (reason) => {
