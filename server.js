@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
  * Setup statics
  */
 app.use('/help',express.static(__dirname + '/doc'));
+app.use('/', express.static(__dirname + '/public'))
 
 /**
  * Setup routes
