@@ -5,19 +5,24 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "apidoc": "apidoc -i ./controllers -o ./doc"
+    "apidoc": "apidoc -i ./controllers -o ./doc",
+    "heroku-prebuild": "cd ./client && npm run build"
   },
   "author": "Patrik Nyman",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^1.0.2",
-    "body-parser": "^1.17.1",
-    "express": "^4.15.2",
-    "jsonwebtoken": "^7.3.0",
-    "mongoose": "^4.9.4",
-    "randomstring": "^1.1.5"
+    "bcrypt": "1.0.2",
+    "body-parser": "1.17.1",
+    "express": "4.15.2",
+    "jsonwebtoken": "7.3.0",
+    "mongoose": "4.9.4",
+    "randomstring": "1.1.5"
   },
   "devDependencies": {
-    "apidoc": "^0.17.5"
+    "apidoc": "0.17.5"
+  },
+  "engines": {
+    "node": "6.1.2",
+    "npm": "4.5.0"
   }
 }
