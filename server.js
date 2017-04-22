@@ -56,6 +56,7 @@ mongoose.connect(dbConnection, null,function(err) {
         }).catch((reason) => {
             //Create standard admin
             AuthManager.createUser('admin', 'admin');
+            console.info("Created standard user");            
         });
 })
 

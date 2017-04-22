@@ -58,7 +58,6 @@ var auth = class AuthorazatitonManager {
                     console.error(err);
                     reject(ResponseHelper.errorResponse(500, err.name));
                 } else if(!user) {
-                    console.log("No user found");
                     reject(ResponseHelper.errorResponse(404, "User not found"));
                 } else {
                     user.password = includePassword ? user.password : '';
