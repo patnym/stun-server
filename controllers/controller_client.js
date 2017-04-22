@@ -19,7 +19,7 @@ router.authorizedRoute.post("/api/client", (req, res, next) => {
     console.log("/api/register called name: ", req.body.name);      
 
     if(req.body.name === undefined) {
-        next(ResponseHelper.errorResponse(400, "name parameter missing", ""));
+        next(ResponseHelper.errorResponse(400, "bad params", "name missing"));
         return;
     }
 

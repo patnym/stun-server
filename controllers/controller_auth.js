@@ -25,10 +25,23 @@ router.authorizedRoute = express.Router();
  * @apiParam {String} username Users unique username
  * @apiParam {String} password Users unique password
  *
- * @apiSuccess {User} user User object
+ * @apiSuccess {Object} user            User object
+ * @apiSuccess {String} user.username   Username
+ * 
+ * @apiSuccessExample {json} Success-Response:
+     HTTP/1.1 200 OK
+     {
+         username: "foo"
+     }
  */
 router.unauthorizedRoute.post("/api/user", (req, res, next) => {
     console.log("post /api/user called with params: ", req.body);
+
+    //Verify params
+    if(req.body.username === undefined || req.body.password === undefined) {
+        next(ResponseHelper.errorResponse(400, "bad input", "username or password missing"));
+        return;
+    }
 
     AuthManager.createUser(req.body.username, req.body.password)
         .then( (user) => {
@@ -48,15 +61,10 @@ router.unauthorizedRoute.post("/api/user", (req, res, next) => {
  * @apiParam {String} username Users unique username
  * @apiParam {String} password Users unique password
  *
- * @apiSuccess {JasonWebToken} Unique authentication token.
- * @@apiSuccessExample {json} Success-Response:
+ * @apiSuccess {String} token Unique authentication token.
+ * @apiSuccessExample {json} Success-Response:
      {
-         "message": "",
-         "error": "",
-         "payload":
-         {
-            token: "123456789abcdefghijklmnopqrstuvwxyz"
-         }
+        token: "123456789abcdefghijklmnopqrstuvwxyz"
      }
  */
 router.unauthorizedRoute.post("/api/login", (req, res, next) => {
@@ -77,10 +85,17 @@ router.unauthorizedRoute.post("/api/login", (req, res, next) => {
  *
  * @apiPermission admin
  * 
- * @apiParam {String} Username Users unique username
- * @apiParam {JasonWebToken} Unique authentication token
+ * @apiParam {String} username  Users unique username
+ * @apiParam {String} token     Authentication token
  *
- * @apiSuccess 
+ * @apiSuccess {Object} user User object
+ * 
+ * @apiSuccessExample {json} Success-Response:
+     {
+         __v: 0
+         username: "foo",
+         _id: "1"
+     }
  */
 router.authorizedRoute.get("/api/user/:username", (req, res, next) => {
     console.log("get /api/user/:username called username: ", req.params);

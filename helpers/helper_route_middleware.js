@@ -9,7 +9,6 @@ if(app.get('env') === 'development') {
     console.log("Running development, using dev error middleware");
     
     errorHandler = (err, req, res, next) => {
-                    console.log("YO");
         res.status(err.stats || 500);
         res.send(
             {

@@ -30,7 +30,7 @@ var auth = class AuthorazatitonManager {
                 bcrypt.hash(password, bcrypt_config.saltRounds, (err, hash) => {
                     if(err) {
                         console.error(err);
-                        reject(ResponseHelper.errorResponse(500, err.name));
+                        reject(ResponseHelper.errorResponse(500, err.name, err.message, err));
                     } else {
                         //Create user
                         const user = new User( { username: username, password: hash } ); 

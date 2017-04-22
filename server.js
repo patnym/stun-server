@@ -13,6 +13,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 /**
+ * Setup statics
+ */
+app.use('/help',express.static(__dirname + '/doc'));
+
+/**
  * Setup routes
  */
 const client_routes = require('./controllers/controller_client');
