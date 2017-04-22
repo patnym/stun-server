@@ -5,6 +5,7 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+const AuthManager = require('./managers/manager_auth')
 
 const app = express();
 
@@ -47,6 +48,16 @@ const dbConnection = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/stun'
 mongoose.connect(dbConnection, null,function(err) {
     if(err) throw err;
     console.log('DB connection established at ', dbConnection);
+
+    //Create a standard user if no user exists
+    AuthManager.getUsers()
+        .then((data) => {
+            //Do nothing
+        }).catch((reason) => {
+            //Create standard admin
+            AuthManager.createUser('admin', 'admin');
+            console.info("Created standard user");            
+        });
 })
 
 /**
