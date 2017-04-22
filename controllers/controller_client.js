@@ -14,7 +14,32 @@ const ResponseHelper = require('../helpers/helper_response');
 const Client = require('../models/model_client');
 
 
-//Create a new client
+/**
+ * @api {post} /api/client?token=:token Register a new client
+ * @apiName RegisterClient
+ * @apiGroup Client
+ *
+ * @apiPermission admin
+ * 
+ * @apiParam {String} name      Client name
+ * @apiParam {String} token     Authentication token
+ * 
+ * @apiSuccess {Object} client         Client object
+ * @apiSuccess {String} client._id     Unique Id
+ * @apiSuccess {String} client.auth    Unique identifier token
+ * @apiSuccess {String} client.name    Client name
+ * @apiSuccess {String} client.port    Client port
+ * @apiSuccess {String} client.ip      Client ip
+ * 
+ * @apiSuccessExample {json} Success-Response:
+     {
+        auth: "YYInLOPOQJnQNNSp57ajPqrDGVDRUD4r",
+        name: "foobar",
+        _id: "58fb78b60446283b97c3d6fe",
+        port: "0000",
+        ip: "0.0.0.0"
+     }
+ */
 router.authorizedRoute.post("/api/client", (req, res, next) => {
     console.log("/api/register called name: ", req.body.name);      
 
@@ -31,7 +56,34 @@ router.authorizedRoute.post("/api/client", (req, res, next) => {
         });
 });
 
-//Update path
+/**
+ * @api {put} /api/client?token=:token Update an existing client
+ * @apiName UpdateClient
+ * @apiGroup Client
+ *
+ * @apiPermission admin
+ * 
+ * @apiParam {String} name      Client name
+ * @apiParam {String} ip        Client ip
+ * @apiParam {String} port      Client port
+ * @apiParam {String} token     Authentication token
+ * 
+ * @apiSuccess {Object} client         Client object
+ * @apiSuccess {String} client._id     Unique Id
+ * @apiSuccess {String} client.auth    Unique identifier token
+ * @apiSuccess {String} client.name    Client name
+ * @apiSuccess {String} client.port    Port to connec to this client
+ * @apiSuccess {String} client.ip      Ip of this client
+ * 
+ * @apiSuccessExample {json} Success-Response:
+     {
+        auth: "YYInLOPOQJnQNNSp57ajPqrDGVDRUD4r",
+        name: "foobar",
+        _id: "58fb78b60446283b97c3d6fe",
+        port: "0000",
+        ip: "0.0.0.0"
+     }
+ */
 router.authorizedRoute.put("/api/client", (req, res, next) => {
     console.log("/api/ping called with body: ", req.body);
 
@@ -46,7 +98,32 @@ router.authorizedRoute.put("/api/client", (req, res, next) => {
         });
 });
 
-//Get client by id path
+/**
+ * @api {get} /api/client/:id?token=:token Get client by id
+ * @apiName GetClient
+ * @apiGroup Client
+ *
+ * @apiPermission admin
+ * 
+ * @apiParam {String} id        Unique Id
+ * @apiParam {String} token     Authentication token
+ * 
+ * @apiSuccess {Object} client         Client object
+ * @apiSuccess {String} client._id     Unique Id
+ * @apiSuccess {String} client.auth    Unique identifier token
+ * @apiSuccess {String} client.name    Client name
+ * @apiSuccess {String} client.port    Port to connec to this client
+ * @apiSuccess {String} client.ip      Ip of this client
+ * 
+ * @apiSuccessExample {json} Success-Response:
+     {
+        auth: "YYInLOPOQJnQNNSp57ajPqrDGVDRUD4r",
+        name: "foobar",
+        _id: "58fb78b60446283b97c3d6fe",
+        port: "0000",
+        ip: "0.0.0.0"
+     }
+ */
 router.authorizedRoute.get("/api/client/:id", (req, res, next) => {
     console.log("/api/client/id/:id called id: ", req.params.id);
 
@@ -58,7 +135,42 @@ router.authorizedRoute.get("/api/client/:id", (req, res, next) => {
         });
 });
 
-//Get clients path
+/**
+ * @api {get} /api/clients?token=:token Get all clients
+ * @apiName GetClients
+ * @apiGroup Client
+ *
+ * @apiPermission admin
+ * 
+ * @apiParam {String} token     Authentication token
+ * 
+ * @apiSuccess {Object[]} clients      Array of Client objects
+ * @apiSuccess {String} client._id     Unique Id
+ * @apiSuccess {String} client.auth    Unique identifier token
+ * @apiSuccess {String} client.name    Client name
+ * @apiSuccess {String} client.port    Port to connec to this client
+ * @apiSuccess {String} client.ip      Ip of this client
+ * 
+ * @apiSuccessExample {json} Success-Response:
+     [  
+        {
+            auth: "YYInLOPOQJnQNNSp57ajPqrDGVDRUD4r",
+            name: "foo",
+            _id: "58fb78b60446283b97c3d6fe",
+            port: "0000",
+            ip: "0.0.0.0"
+        },
+        {
+            auth: "57ajPqrDGVDRUD4rYYInLOPOQJnQNNSp",
+            name: "bar",
+            _id: "46283b97c3d6fe58fb78b604",
+            port: "1111",
+            ip: "8.8.8.8"
+        }
+
+        ..
+     ]
+ */
 router.authorizedRoute.get("/api/clients", (req, res, next) => {
     console.log("/api/getclients called");
 
@@ -71,7 +183,32 @@ router.authorizedRoute.get("/api/clients", (req, res, next) => {
 
 });
 
-//Delete client by id
+/**
+ * @api {delete} /api/client?token=:token Delete a client
+ * @apiName DeleteClient
+ * @apiGroup Client
+ *
+ * @apiPermission admin
+ * 
+ * @apiParam {String} id        Unique Id
+ * @apiParam {String} token     Authentication token
+ * 
+ * @apiSuccess {Object[]} client       Client object
+ * @apiSuccess {String} client._id     Unique Id
+ * @apiSuccess {String} client.auth    Unique identifier token
+ * @apiSuccess {String} client.name    Client name
+ * @apiSuccess {String} client.port    Port to connec to this client
+ * @apiSuccess {String} client.ip      Ip of this client
+ * 
+ * @apiSuccessExample {json} Success-Response:
+    {
+        auth: "YYInLOPOQJnQNNSp57ajPqrDGVDRUD4r",
+        name: "foo",
+        _id: "58fb78b60446283b97c3d6fe",
+        port: "0000",
+        ip: "0.0.0.0"
+    }
+ */
 router.authorizedRoute.delete("/api/client/:id", (req, res, next) => {
     console.log("/api/deleteclient/id/:id called id: ", req.params.id);
 
@@ -83,7 +220,22 @@ router.authorizedRoute.delete("/api/client/:id", (req, res, next) => {
         });
 });
 
-//Ping route, this is where clients ping to register new IP's
+/**
+ * @api {delete} /api/client?token=:token Ping end-point
+ * @apiName PingClient
+ * @apiGroup Client
+ *
+ * @apiPermission client
+ * 
+ * @apiParam {String} token     Unique client based authentication token
+ * 
+ * @@apiSuccess {Number} status Status code
+ * 
+ * @apiSuccessExample {json} Success-Response:
+     {
+         status: 200
+     } 
+ */
 router.unauthorizedRoute.post("/api/ping", (req, res, next) => {
     console.log("/api/ping/:id/:token called params: ", req.body);
 
@@ -94,7 +246,7 @@ router.unauthorizedRoute.post("/api/ping", (req, res, next) => {
     ClientManager.updateClientById(req.body.id,
         {   ip: req.body.ip })
         .then( (client) => {
-            res.json(client);
+            res.send({ status: 200 });
         }).catch( (reason) => {
             next(reason);
         });

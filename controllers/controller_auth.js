@@ -25,7 +25,7 @@ router.authorizedRoute = express.Router();
  * @apiParam {String} username Users unique username
  * @apiParam {String} password Users unique password
  *
- * @apiSuccess {Object} user            User object
+ * @apiSuccess {Object} user        User object
  * @apiSuccess {String} user.username   Username
  * 
  * @apiSuccessExample {json} Success-Response:
@@ -62,6 +62,7 @@ router.unauthorizedRoute.post("/api/user", (req, res, next) => {
  * @apiParam {String} password Users unique password
  *
  * @apiSuccess {String} token Unique authentication token.
+ * 
  * @apiSuccessExample {json} Success-Response:
      {
         token: "123456789abcdefghijklmnopqrstuvwxyz"
@@ -88,11 +89,12 @@ router.unauthorizedRoute.post("/api/login", (req, res, next) => {
  * @apiParam {String} username  Users unique username
  * @apiParam {String} token     Authentication token
  *
- * @apiSuccess {Object} user User object
+ * @apiSuccess {Object} user            User object
+ * @apiSuccess {String} user.username   Username
+ * @apiSuccess {String} user._id        Unique Id
  * 
  * @apiSuccessExample {json} Success-Response:
      {
-         __v: 0
          username: "foo",
          _id: "1"
      }
@@ -109,7 +111,33 @@ router.authorizedRoute.get("/api/user/:username", (req, res, next) => {
         });
 });
 
-//Get users
+/**
+ * @api {get} /api/users?token=:token Get all users
+ * @apiName GetUsers
+ * @apiGroup User
+ *
+ * @apiPermission admin
+ *
+ * @apiParam  {String} token Authentication token
+ * 
+ * @apiSuccess {Object[]} users         User object
+ * @apiSuccess {String} user.username   Username
+ * @apiSuccess {String} user._id        Unique Id
+ * 
+ * @apiSuccessExample {json} Success-Response:
+         [
+            {
+                username: "foo",
+                _id: "1"
+            },
+            {
+                username: "bar",
+                _id: "2"
+            }
+
+            ..
+         ]
+ */
 router.authorizedRoute.get("/api/users", (req, res, next) => {
     console.log("get /api/users called");
 
@@ -121,7 +149,6 @@ router.authorizedRoute.get("/api/users", (req, res, next) => {
         });
 });
 
-//Update user
 router.authorizedRoute.put("/api/user", (req, res) => {
     console.log("put /api/user called params: ", req.body);
     //NOT IMPLEMENTED
