@@ -69,7 +69,7 @@ router.unauthorizedRoute.post("/api/user", (req, res, next) => {
      }
  */
 router.unauthorizedRoute.post("/api/login", (req, res, next) => {
-    console.log("post /api/login called");
+    console.log("post /api/login called params: ", req.body);
 
     AuthManager.authenticateUser(req.body.username, req.body.password)
         .then( (token) => {
