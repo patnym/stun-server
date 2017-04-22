@@ -4,7 +4,7 @@
   "description": "Web based API that stores IPs to allow me to connect to my home server without a static IP",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "apidoc": "apidoc -i ./controllers -o ./doc"
   },
   "author": "Patrik Nyman",
