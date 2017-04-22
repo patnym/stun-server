@@ -42,7 +42,7 @@ app.use(error_middleware);
 /**
  * Setup DB connection
  */
-const dbConnection = process.env.DB || 'mongodb://127.0.0.1:27017/stun';
+const dbConnection = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/stun';
 mongoose.connect(dbConnection, null,function(err) {
     if(err) throw err;
     console.log('DB connection established at ', dbConnection);
