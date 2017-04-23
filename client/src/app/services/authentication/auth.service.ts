@@ -20,8 +20,12 @@ export class AuthService {
     });
   }
 
-  test() {
-    console.log("I got injected");
+  isAuthenticated() {
+    return localStorage.getItem('currentUser') ? true : false;
+  }
+
+  logout() {
+    localStorage.removeItem('currentUser');
   }
 
 }
