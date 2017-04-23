@@ -21,7 +21,8 @@ export class AuthService {
   }
 
   getToken() {
-    return localStorage.getItem('currentUser');
+    let token = localStorage.getItem('currentUser');
+    return token ? JSON.parse(token).token : undefined;
   }
 
   isAuthenticated() {
