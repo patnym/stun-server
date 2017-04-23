@@ -1,7 +1,7 @@
 const express = require('express');
 const router = {};
-router.unauthorizedRoute = express.Router(); //All routes that require no authorization
-router.authorizedRoute = express.Router(); //All routes that require authorization
+router.routes = express.Router(); //All routes that require no authorization
+var auth_middleware = require('./controller_auth').middleware;
 
 //Managers
 const Auth = require('../managers/manager_auth');
@@ -40,7 +40,7 @@ const Client = require('../models/model_client');
         ip: "0.0.0.0"
      }
  */
-router.authorizedRoute.post("/api/client", (req, res, next) => {
+router.routes.post("/api/client", auth_middleware, (req, res, next) => {
     console.log("/api/register called name: ", req.body.name);      
 
     if(req.body.name === undefined) {
@@ -84,7 +84,7 @@ router.authorizedRoute.post("/api/client", (req, res, next) => {
         ip: "0.0.0.0"
      }
  */
-router.authorizedRoute.put("/api/client", (req, res, next) => {
+router.routes.put("/api/client", auth_middleware, (req, res, next) => {
     console.log("/api/ping called with body: ", req.body);
 
     ClientManager.updateClientById(req.body.id,
@@ -124,7 +124,7 @@ router.authorizedRoute.put("/api/client", (req, res, next) => {
         ip: "0.0.0.0"
      }
  */
-router.authorizedRoute.get("/api/client/:id", (req, res, next) => {
+router.routes.get("/api/client/:id", auth_middleware, (req, res, next) => {
     console.log("/api/client/id/:id called id: ", req.params.id);
 
     ClientManager.getClientById(req.params.id)
@@ -171,7 +171,7 @@ router.authorizedRoute.get("/api/client/:id", (req, res, next) => {
         ..
      ]
  */
-router.authorizedRoute.get("/api/clients", (req, res, next) => {
+router.routes.get("/api/clients", auth_middleware, (req, res, next) => {
     console.log("/api/getclients called");
 
     ClientManager.getClients()
@@ -209,7 +209,7 @@ router.authorizedRoute.get("/api/clients", (req, res, next) => {
         ip: "0.0.0.0"
     }
  */
-router.authorizedRoute.delete("/api/client/:id", (req, res, next) => {
+router.routes.delete("/api/client/:id", auth_middleware, (req, res, next) => {
     console.log("/api/deleteclient/id/:id called id: ", req.params.id);
 
     ClientManager.deleteClientById(req.params.id)
@@ -236,7 +236,7 @@ router.authorizedRoute.delete("/api/client/:id", (req, res, next) => {
          status: 200
      } 
  */
-router.unauthorizedRoute.post("/api/ping", (req, res, next) => {
+router.routes.post("/api/ping", (req, res, next) => {
     console.log("/api/ping/:id/:token called params: ", req.body);
 
     //Validate token

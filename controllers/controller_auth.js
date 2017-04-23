@@ -12,8 +12,30 @@ const UserHelper = require('../helpers/helper_user');
 
 const router = {};
 router.middleware = express.Router();
-router.unauthorizedRoute = express.Router();
-router.authorizedRoute = express.Router();
+router.routes = express.Router();
+
+//Middleware token validation
+var auth_middleware = (req, res, next) => {
+    console.log("middleware used");
+    const token = req.body.token || req.params.token || req.query.token;
+
+    if(token){
+        try {
+            const decoded = jwt.verify(token, jwt_config.key);
+            if(decoded === jwt_config.payload) {
+                console.log("Authorization granted");
+                next();
+            }
+        } catch (err) {
+            next(err);
+        }
+    } else {
+        next(ResponseHelper.errorResponse(400, "No token in request"));
+    }
+}
+
+router.middleware = auth_middleware;
+
 
 /**
  * @api {post} /api/user Register a new user
@@ -34,7 +56,7 @@ router.authorizedRoute = express.Router();
          username: "foo"
      }
  */
-router.unauthorizedRoute.post("/api/user", (req, res, next) => {
+router.routes.post("/api/user", (req, res, next) => {
     console.log("post /api/user called with params: ", req.body);
 
     //Verify params
@@ -68,7 +90,7 @@ router.unauthorizedRoute.post("/api/user", (req, res, next) => {
         token: "123456789abcdefghijklmnopqrstuvwxyz"
      }
  */
-router.unauthorizedRoute.post("/api/login", (req, res, next) => {
+router.routes.post("/api/login", (req, res, next) => {
     console.log("post /api/login called params: ", req.body);
 
     AuthManager.authenticateUser(req.body.username, req.body.password)
@@ -99,7 +121,7 @@ router.unauthorizedRoute.post("/api/login", (req, res, next) => {
          _id: "1"
      }
  */
-router.authorizedRoute.get("/api/user/:username", (req, res, next) => {
+router.routes.get("/api/user/:username", auth_middleware, (req, res, next) => {
     console.log("get /api/user/:username called username: ", req.params);
 
     AuthManager.getUser(req.params.username)
@@ -138,7 +160,7 @@ router.authorizedRoute.get("/api/user/:username", (req, res, next) => {
             ..
          ]
  */
-router.authorizedRoute.get("/api/users", (req, res, next) => {
+router.routes.get("/api/users", auth_middleware, (req, res, next) => {
     console.log("get /api/users called");
 
     AuthManager.getUsers()
@@ -149,36 +171,17 @@ router.authorizedRoute.get("/api/users", (req, res, next) => {
         });
 });
 
-router.authorizedRoute.put("/api/user", (req, res) => {
+router.routes.put("/api/user", auth_middleware, (req, res) => {
     console.log("put /api/user called params: ", req.body);
     //NOT IMPLEMENTED
     res.status(501).send({error: "User update isnt implmented yet"});
 });
 
 //Delete user
-router.authorizedRoute.delete("/api/user", (req, res) => {
+router.routes.delete("/api/user", auth_middleware, (req, res) => {
     console.log("delete /api/user called params: ", req.body);
     //NOT IMPLEMENTED
     res.status(501).send({error: "User delete isnt implmented yet"});
 });
-
-//Middleware token validation
-router.middleware = (req, res, next) => {
-    const token = req.body.token || req.params.token || req.query.token;
-
-    if(token){
-        try {
-            const decoded = jwt.verify(token, jwt_config.key);
-            if(decoded === jwt_config.payload) {
-                console.log("Authorization granted");
-                next();
-            }
-        } catch (err) {
-            next(err);
-        }
-    } else {
-        next(ResponseHelper.errorResponse(400, "No token in request"));
-    }
-}
 
 module.exports = router;
