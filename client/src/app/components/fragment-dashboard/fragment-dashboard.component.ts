@@ -5,10 +5,10 @@ import { ClientModel } from '../../models/client.model';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  templateUrl: './fragment-dashboard.component.html',
+  styleUrls: ['./fragment-dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class FragmentDashboardComponent implements OnInit {
 
   clientList: Array<ClientModel> = [];
 

@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
         //Handle error?
       },
       () => {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/home']);
       }
     )
   }
