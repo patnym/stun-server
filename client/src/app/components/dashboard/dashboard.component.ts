@@ -10,6 +10,8 @@ import { ClientModel } from '../../models/client.model';
 })
 export class DashboardComponent implements OnInit {
 
+  clientList: Array<ClientModel> = [];
+
   constructor(private client: ClientService) { }
 
   ngOnInit() {
@@ -17,6 +19,8 @@ export class DashboardComponent implements OnInit {
     this.client.getClients().subscribe(
       (clients: Array<ClientModel>) => {
         console.log(clients);
+
+        this.clientList = clients;
       }
     )
   }
