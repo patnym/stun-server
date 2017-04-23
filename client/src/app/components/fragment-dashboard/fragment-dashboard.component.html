@@ -1,0 +1,10 @@
+<div class="col-sm-9">
+  <div class="well">
+    <h4>Dashboard</h4>
+    <p>Some text..</p>
+
+    <div *ngFor="let client of clientList" class="well">
+        <app-fragment-client [model]="client"></app-fragment-client>
+    </div>
+  </div>
+</div>
