@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -20,8 +20,12 @@ export class AuthService {
     });
   }
 
+  getToken() {
+    return localStorage.getItem('currentUser');
+  }
+
   isAuthenticated() {
-    return localStorage.getItem('currentUser') ? true : false;
+    return this.getToken() ? true : false;
   }
 
   logout() {
