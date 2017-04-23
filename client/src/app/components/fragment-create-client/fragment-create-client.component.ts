@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ClientService } from '../../services/client/client.service';
+
 
 @Component({
   selector: 'app-fragment-create-client',
@@ -10,13 +13,24 @@ export class FragmentCreateClientComponent implements OnInit {
     name: ''
   };
 
-  constructor() { }
+  constructor(private client: ClientService, private router: Router) { }
 
   ngOnInit() {
   }
 
   onSubmit() {
-    
+    if(!this.model.name && this.model.name === '') {
+      console.log('Must enter a name');
+    } else {
+      this.client.createClient(this.model.name)
+        .subscribe( (result) => {
+          if(result) {
+            this.router.navigate(['']);
+          }
+        });
+
+      
+    }
   }
 
 }
