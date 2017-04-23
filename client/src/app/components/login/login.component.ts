@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/authentication/auth.service'
 
 @Component({
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit {
     password: ''
   }
 
-  constructor(private auth: AuthService) { }
+  constructor(private router: Router, private auth: AuthService) { }
 
   ngOnInit() {
   }
@@ -28,7 +29,7 @@ export class LoginComponent implements OnInit {
         //Handle error?
       },
       () => {
-        //Redirect
+        this.router.navigate(['/dashboard']);
       }
     )
   }
