@@ -36,6 +36,20 @@ export class ClientService {
       });
   }
 
+  //Create client
+  createClient(name: String) {
+    return this.http.post('/api/client', { name: name, token: this.auth.getToken()})
+      .map( (data: any) => {
+        console.log(data);
+        let client = data.json();
+
+        if(client && client.name) {
+          return true;
+        }
+        return false;
+      });
+  }
+
   //Get a client
 
   //Update client

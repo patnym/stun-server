@@ -9,15 +9,19 @@ import { LoginComponent } from './components/login/login.component';
 
 import { AuthService } from './services/authentication/auth.service';
 import { ClientService } from './services/client/client.service';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { FragmentClientComponent } from './components/fragment-client/fragment-client.component';
+import { FragmentDashboardComponent } from './components/fragment-dashboard/fragment-dashboard.component';
+import { FragmentClientComponent } from './components/fragment-dashboard/fragment-client/fragment-client.component';
+import { FragmentCreateClientComponent } from './components/fragment-create-client/fragment-create-client.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DashboardComponent,
-    FragmentClientComponent
+    FragmentDashboardComponent,
+    FragmentClientComponent,
+    FragmentCreateClientComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
