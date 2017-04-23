@@ -8,13 +8,16 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 
 import { AuthService } from './services/authentication/auth.service';
+import { ClientService } from './services/client/client.service';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { FragmentClientComponent } from './components/fragment-client/fragment-client.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    FragmentClientComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +25,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     HttpModule,
     CustomRoutingModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, ClientService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,18 @@
+<h1>{{model.name}}</h1>
+
+<button type="button" class="btn btn-primary" (click)="isCollapsed = !isCollapsed">Details</button>
+
+<div *ngIf="isCollapsed">
+  <div class="row">
+      <div class="col-xs-4"> <h4>Ip: </h4> </div>
+      <div class="col-xs-8"> <span> {{model.ip}} </span></div>
+  </div>
+  <div class="row">
+      <div class="col-xs-4"> <h4>Port: </h4> </div>
+      <div class="col-xs-8"> <span> {{model.port}} </span></div>
+  </div>
+  <div class="row">
+      <div class="col-xs-4"> <h4>Token: </h4> </div>
+      <div class="col-xs-8"> <span> {{model.auth}} </span></div>
+  </div>
+</div>
