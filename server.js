@@ -41,6 +41,12 @@ app.use(auth_routes.authorizedRoute);
 //Error middleware
 app.use(error_middleware);
 
+// 404 catch 
+app.all('*', (req , res ) => {
+  console.log(`[TRACE] Server 404 request: ${req.originalUrl}`);
+  res.status(200).sendFile(__dirname + '/public/index.html');
+});
+
 /**
  * Setup DB connection
  */
