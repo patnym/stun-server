@@ -1,19 +1,25 @@
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from '../components/dashboard/dashboard.component';
+import { FragmentDashboardComponent } from '../components/fragment-dashboard/fragment-dashboard.component';
+import { HomeComponent } from '../components/home/home.component';
 import { LoginComponent } from '../components/login/login.component';
+import { FragmentCreateClientComponent } from '../components/fragment-create-client/fragment-create-client.component';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from '../services/authentication/auth-guard.service';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/dashboard',
+    redirectTo: '/home',
     pathMatch: 'full'
   },
   {
-    path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [AuthGuard]
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', component: FragmentDashboardComponent },
+      { path: 'create', component: FragmentCreateClientComponent }
+    ]
   },
   { 
     path: 'login',
