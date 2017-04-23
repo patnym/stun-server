@@ -1,5 +1,6 @@
 test:
-  pre: heroku-prebuild 
+  pre: 
+   - heroku-prebuild 
 deployment:
   staging:
     branch: master
