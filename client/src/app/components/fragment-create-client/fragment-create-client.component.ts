@@ -6,10 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./fragment-create-client.component.css']
 })
 export class FragmentCreateClientComponent implements OnInit {
+  model: any = {
+    name: ''
+  };
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onSubmit() {
+    
   }
 
 }
