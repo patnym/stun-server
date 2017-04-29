@@ -6,9 +6,14 @@ var user = mongoose.Schema(
         //name of client
         username: { type: String },
         //password
-        password: { type: String}
+        password: { type: String},
         //email?
         //role?
+
+        //clients
+        clients : [
+            { type: mongoose.Schema.Types.ObjectId, ref: 'Client' }
+        ]
     }
 );
 
