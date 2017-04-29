@@ -51,7 +51,7 @@ router.routes.post("/api/client", auth_middleware, (req, res, next) => {
     ClientManager.createClient(req.body.name, AuthManager.generateToken())
         .then( (client) => {
             console.log("Got here!");
-            AuthManager.addClient(req.user, client)
+            AuthManager.addClient(req.user, client._id)
                 .then( () => {
                     res.send(client);
                 }).catch( (reason) => {
@@ -180,7 +180,7 @@ router.routes.get("/api/client/:id", auth_middleware, (req, res, next) => {
 router.routes.get("/api/clients", auth_middleware, (req, res, next) => {
     console.log("/api/getclients called");
 
-    ClientManager.getClients()
+    ClientManager.getClientsByUser(req.user)
     .then( (clients) => {
         res.json(clients);
     }).catch( (reason) => {
