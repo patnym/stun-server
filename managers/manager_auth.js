@@ -7,6 +7,8 @@ const bcrypt_config = require('../configs/bcrypt_config');
 const User = require('../models/model_user');
 const ResponseHelper = require('../helpers/helper_response');
 
+const ClientManager = require('./manager_client');
+
 var auth = class AuthorazatitonManager {
 
     //Generate a token used to save clients
@@ -67,6 +69,23 @@ var auth = class AuthorazatitonManager {
         });
     }
 
+    getUserById(id) {
+        return new Promise( (resolve, reject) => {
+            User.findById(id, (err, user) => {
+                if(err) {
+                    console.error(err);
+                    reject(err);
+                } else {
+                    if(!user) {
+                        reject(ResponseHelper.errorResponse(500, "User by id could not be found"));
+                    } else {
+                        resolve(user);
+                    }
+                }
+            });
+        });
+    }
+
     //Get all users
     getUsers() {
         return new Promise( (resolve, reject) => {
@@ -100,6 +119,55 @@ var auth = class AuthorazatitonManager {
         });
     }
 
+    //Adds a new client by id to user by id
+    addClient(id, clientId) {
+        return new Promise( (resolve, reject) => {
+            console.log("id is: ", id);
+            this.getUserById(id).then( (user) =>{
+
+                user.clients.push(clientId);
+
+                user.save( (err, user) => {
+                    if(err) {
+                        console.error(err);
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }).catch( (reason) => {
+                console.error(reason);
+                reject(reason);
+            });
+        })
+    }
+
+    //Remove a client by id from user by id
+    removeClient(id, clientId) {
+        return new Promise( (resolve, reject) => {
+
+            this.getUserById(id).then ( (user) => {
+
+                var index = user.clients.indexOf(userId);
+
+                if(!index) {
+                    console.error("ManagerAuth: Client not in array");
+                    reject(ResponseHelper.errorResponse(500, "clientId not in array"));
+                } else {
+                    user.clients.splice(index, 1);
+
+                    user.save( (err, user) => {
+                        if(err) {
+                            console.error(err);
+                            reject(err);
+                        } else {
+                            resolve();
+                        }
+                    });
+                }
+            });
+        });
+    }
 
     //Remove user
     removeUser(id) {

@@ -4,7 +4,7 @@ router.routes = express.Router(); //All routes that require no authorization
 var auth_middleware = require('./controller_auth').middleware;
 
 //Managers
-const Auth = require('../managers/manager_auth');
+const AuthManager = require('../managers/manager_auth');
 const ClientManager = require('../managers/manager_client');
 
 //Helpers
@@ -48,9 +48,15 @@ router.routes.post("/api/client", auth_middleware, (req, res, next) => {
         return;
     }
 
-    ClientManager.createClient(req.body.name, Auth.generateToken())
+    ClientManager.createClient(req.body.name, AuthManager.generateToken())
         .then( (client) => {
-            res.json(client);
+            console.log("Got here!");
+            AuthManager.addClient(req.user, client)
+                .then( () => {
+                    res.send(client);
+                }).catch( (reason) => {
+                    next(reason);
+                })
         }).catch( (reason) => {
             next(reason);
         });
