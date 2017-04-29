@@ -21,11 +21,17 @@ var auth_middleware = (req, res, next) => {
 
     if(token){
         try {
-            const decoded = jwt.verify(token, jwt_config.key);
-            if(decoded === jwt_config.payload) {
-                console.log("Authorization granted");
+            jwt.verify(token, jwt_config.key, (err, decoded) => {
+                if(err) {
+                    next(err);
+                    return;
+                }
+
+                console.log("Auth granted payload is: " , decoded);
+                req.user = decoded.user;
+                console.log(req.user);
                 next();
-            }
+            });
         } catch (err) {
             next(err);
         }
