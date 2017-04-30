@@ -2,10 +2,12 @@ Create angular 2 client
 
 TODO:
 * Server
-    * Link clients to a user
+    * Remove client
     * Role support
     * Potential dynamic routes
 * Client
+    * Remove client
+    * Log out
     * Role support
     * Register new users
     * Edit user
