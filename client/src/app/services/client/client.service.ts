@@ -1,21 +1,24 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, URLSearchParams, RequestOptions } from '@angular/http';
+import { Http, Response, URLSearchParams, RequestOptions, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { AuthService } from '../authentication/auth.service';
+
+import { HttpService } from '../http/http.service';
+import { HttpSlashEncodedParamas } from '../http/httpparams';
 
 import { ClientModel } from '../../models/client.model';
 
 @Injectable()
 export class ClientService {
 
-  constructor(private auth: AuthService, private http: Http) { }
+  constructor(private auth: AuthService, private http: HttpService) { }
 
   //Get all ClientService
   getClients() {
     //Get token
     let token = this.auth.getToken();
 
-    return this.http.get("/api/clients?token=" + token)
+    return this.http.get("/api/clients", {}, token)
       .map( (data: any): Array<ClientModel> => {
         console.log(data);
 
@@ -38,7 +41,7 @@ export class ClientService {
 
   //Create client
   createClient(name: string) {
-    return this.http.post('/api/client', { name: name, token: this.auth.getToken()})
+    return this.http.post('/api/client', { name: name }, this.auth.getToken())
       .map( (data: any) => {
         console.log(data);
         let client = data.json();
@@ -51,7 +54,10 @@ export class ClientService {
   }
 
   removeClient(id: string) {
-    return this.http.delete('/api/client/' + id + "?token=" + this.auth.getToken())
+    let params = new HttpSlashEncodedParamas();
+    params.setParam("", id);
+
+    return this.http.delete('/api/client', params, this.auth.getToken())
       .map( (data: any) => {
         console.log(data);
         return true;

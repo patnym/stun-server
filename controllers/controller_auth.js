@@ -17,27 +17,43 @@ router.routes = express.Router();
 //Middleware token validation
 var auth_middleware = (req, res, next) => {
     console.log("middleware used");
-    const token = req.body.token || req.params.token || req.query.token;
+    //Get Authorization header
+    const header = req.get('authorization');
+    if(!header) {
+        next(ResponseHelper.errorResponse(400, "Missing authorization header"));
+        return;
+    }
 
-    if(token){
-        try {
-            jwt.verify(token, jwt_config.key, (err, decoded) => {
-                if(err) {
-                    next(err);
-                    return;
-                }
+    //Extract token and type
+    const params = header.split(" ");
+    //Handle bearer
+    if(params[0].toLowerCase() == "bearer") {
+        
+        const token = params[1];
 
-                console.log("Auth granted payload is: " , decoded);
-                req.user = decoded.user;
-                console.log(req.user);
-                next();
-            });
-        } catch (err) {
-            next(err);
+        if(token){
+            try {
+                jwt.verify(token, jwt_config.key, (err, decoded) => {
+                    if(err) {
+                        next(err);
+                        return;
+                    }
+
+                    console.log("Auth granted payload is: " , decoded);
+                    req.user = decoded.user;
+                    console.log(req.user);
+                    next();
+                });
+            } catch (err) {
+                next(err);
+            }
+        } else {
+            next(ResponseHelper.errorResponse(400, "No token in request"));
         }
     } else {
-        next(ResponseHelper.errorResponse(400, "No token in request"));
+        next(ResponseHelper.errorResponse(400, "Only handles Bearer type authorization header"));
     }
+
 }
 
 router.middleware = auth_middleware;
@@ -115,7 +131,6 @@ router.routes.post("/api/login", (req, res, next) => {
  * @apiPermission admin
  * 
  * @apiParam {String} username  Users unique username
- * @apiParam {String} token     Authentication token
  *
  * @apiSuccess {Object} user            User object
  * @apiSuccess {String} user.username   Username
@@ -145,8 +160,6 @@ router.routes.get("/api/user/:username", auth_middleware, (req, res, next) => {
  * @apiGroup User
  *
  * @apiPermission admin
- *
- * @apiParam  {String} token Authentication token
  * 
  * @apiSuccess {Object[]} users         User object
  * @apiSuccess {String} user.username   Username

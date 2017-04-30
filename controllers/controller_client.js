@@ -22,7 +22,6 @@ const Client = require('../models/model_client');
  * @apiPermission admin
  * 
  * @apiParam {String} name      Client name
- * @apiParam {String} token     Authentication token
  * 
  * @apiSuccess {Object} client         Client object
  * @apiSuccess {String} client._id     Unique Id
@@ -72,7 +71,6 @@ router.routes.post("/api/client", auth_middleware, (req, res, next) => {
  * @apiParam {String} name      Client name
  * @apiParam {String} ip        Client ip
  * @apiParam {String} port      Client port
- * @apiParam {String} token     Authentication token
  * 
  * @apiSuccess {Object} client         Client object
  * @apiSuccess {String} client._id     Unique Id
@@ -112,7 +110,6 @@ router.routes.put("/api/client", auth_middleware, (req, res, next) => {
  * @apiPermission admin
  * 
  * @apiParam {String} id        Unique Id
- * @apiParam {String} token     Authentication token
  * 
  * @apiSuccess {Object} client         Client object
  * @apiSuccess {String} client._id     Unique Id
@@ -148,7 +145,6 @@ router.routes.get("/api/client/:id", auth_middleware, (req, res, next) => {
  *
  * @apiPermission admin
  * 
- * @apiParam {String} token     Authentication token
  * 
  * @apiSuccess {Object[]} clients      Array of Client objects
  * @apiSuccess {String} client._id     Unique Id
@@ -197,7 +193,6 @@ router.routes.get("/api/clients", auth_middleware, (req, res, next) => {
  * @apiPermission admin
  * 
  * @apiParam {String} id        Unique Id
- * @apiParam {String} token     Authentication token
  * 
  * @apiSuccess {Object[]} client       Client object
  * @apiSuccess {String} client._id     Unique Id
@@ -233,7 +228,7 @@ router.routes.delete("/api/client/:id", auth_middleware, (req, res, next) => {
  *
  * @apiPermission client
  * 
- * @apiParam {String} token     Unique client based authentication token
+ * @apiParam {String} token Unique client based authentication token
  * 
  * @@apiSuccess {Number} status Status code
  * 
