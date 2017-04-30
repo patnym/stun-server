@@ -9,24 +9,27 @@ export class HttpService {
   
   //params should be its own object
   get(url: string, params?: HttpParams, token?: string) {
-    let formated_url = url + ( params === undefined || params === {} ? params.toString() : "" );
-
-    return this.http.get(formated_url, this.createAuthHeaderWithOptions(token));
+    return this.http.get(this.formatUrlFromParams(url, params), this.createAuthHeaderWithOptions(token));
   }
 
-  post(url:string, body?: any, auth?: string) {
-    return this.http.post(url, body);
+  post(url:string, body?: any, token?: string) {
+    return this.http.post(url, body, this.createAuthHeaderWithOptions(token));
   }
 
-  delete(url: string, params?: HttpParams, auth?: string) {
-    return this.http.delete(url);
+  delete(url: string, params?: HttpParams, token?: string) {
+    return this.http.delete(this.formatUrlFromParams(url, params), this.createAuthHeaderWithOptions(token));
   }
 
+  private formatUrlFromParams(url, params: HttpParams) {
+    if(params === undefined || Object.keys(params).length === 0)
+      return url;
+
+    return url + params.toString();
+  }
 
   private createAuthHeaderWithOptions(token: string): RequestOptions {
-    if(!token) {
+    if(!token)
       return undefined
-    }
 
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
