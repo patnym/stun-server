@@ -17,27 +17,38 @@ router.routes = express.Router();
 //Middleware token validation
 var auth_middleware = (req, res, next) => {
     console.log("middleware used");
-    const token = req.body.token || req.params.token || req.query.token;
+    //Get Authorization header
+    const header = req.get('authorization');
+    //Extract token and type
+    const params = header.split(" ");
+    //Handle bearer
+    if(params[0].toLowerCase() == "bearer") {
+        
+        const token = params[1];
 
-    if(token){
-        try {
-            jwt.verify(token, jwt_config.key, (err, decoded) => {
-                if(err) {
-                    next(err);
-                    return;
-                }
+        if(token){
+            try {
+                jwt.verify(token, jwt_config.key, (err, decoded) => {
+                    if(err) {
+                        next(err);
+                        return;
+                    }
 
-                console.log("Auth granted payload is: " , decoded);
-                req.user = decoded.user;
-                console.log(req.user);
-                next();
-            });
-        } catch (err) {
-            next(err);
+                    console.log("Auth granted payload is: " , decoded);
+                    req.user = decoded.user;
+                    console.log(req.user);
+                    next();
+                });
+            } catch (err) {
+                next(err);
+            }
+        } else {
+            next(ResponseHelper.errorResponse(400, "No token in request"));
         }
     } else {
-        next(ResponseHelper.errorResponse(400, "No token in request"));
+        next(ResponseHelper.errorResponse(400, "Only handles Bearer type authorization header"));
     }
+
 }
 
 router.middleware = auth_middleware;
