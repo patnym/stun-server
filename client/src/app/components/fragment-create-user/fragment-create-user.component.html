@@ -1,0 +1,34 @@
+<h2>Register user</h2>
+<form class="form-horizontal" (ngSubmit)="f.form.valid && passwordsMatching() && onSubmit()" #f="ngForm" novalidate>
+
+  <!-- Username -->
+  <div class="form-group">
+    <label class="control-label col-sm-1" for="username">Username:</label>
+    <div class="col-xs-3">
+      <input type="text" class="form-control" id="username" placeholder="Enter username" name="username" [(ngModel)]="model.username"  required>
+    </div>
+  </div>
+
+  <!-- Password -->
+  <div class="form-group">
+    <label class="control-label col-sm-1" for="password">Password:</label>
+    <div class="col-xs-3">
+      <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" [(ngModel)]="model.password"  required>
+    </div>
+  </div>
+  
+  <!-- Re password -->
+  <div class="form-group has-feedback" [class.has-success]="passwordsMatching()" [class.has-error]="!passwordsMatching()">
+    <label class="control-label col-sm-1" for="repassword">Re-enter:</label>
+    <div class="col-xs-3">
+      <input type="password" class="form-control" id="repassword" placeholder="Re-enter password" name="repassword" [(ngModel)]="model.repassword"  required>
+      <span class="glyphicon form-control-feedback" [class.glyphicon-ok]="passwordsMatching()" [class.glyphicon-remove]="!passwordsMatching()"></span>
+    </div>
+  </div>
+
+  <div class="form-group">        
+    <div class="col-sm-offset-1 col-sm-10">
+      <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+  </div>
+</form>
