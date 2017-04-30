@@ -1,10 +1,10 @@
 
 export interface ClientModel {
 
-    auth: String;
-    name: String;
-    ip: String;
-    port: String;
-    _id: String;
+    auth: string;
+    name: string;
+    ip: string;
+    port: string;
+    _id: string;
 
 }

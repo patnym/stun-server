@@ -4,15 +4,24 @@
 
 <div *ngIf="isCollapsed">
   <div class="row">
-      <div class="col-xs-4"> <h4>Ip: </h4> </div>
-      <div class="col-xs-8"> <span> {{model.ip}} </span></div>
+    <div class="col-xs-4"> <h4>Ip: </h4> </div>
+    <div class="col-xs-8"> <span> {{model.ip}} </span></div>
   </div>
   <div class="row">
-      <div class="col-xs-4"> <h4>Port: </h4> </div>
-      <div class="col-xs-8"> <span> {{model.port}} </span></div>
+    <div class="col-xs-4"> <h4>Port: </h4> </div>
+    <div class="col-xs-8"> <span> {{model.port}} </span></div>
   </div>
   <div class="row">
-      <div class="col-xs-4"> <h4>Token: </h4> </div>
-      <div class="col-xs-8"> <span> {{model.auth}} </span></div>
+    <div class="col-xs-4"> <h4>Token: </h4> </div>
+    <div class="col-xs-8"> <span> {{model.auth}} </span></div>
+  </div>
+  <!-- Options row -->
+  <div class="row">
+    <div class="col-xs-1">
+        <button type="button" class="btn btn-danger" (click)="onDelete()">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            <span class="glyphicon-class"> Delete </span> 
+        </button>
+    </div>
   </div>
 </div>
