@@ -7,7 +7,6 @@ TODO:
     * Potential dynamic routes
 * Client
     * Remove client
-    * Log out
     * Role support
     * Register new users
     * Edit user
