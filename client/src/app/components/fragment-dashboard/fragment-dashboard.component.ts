@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../services/client/client.service';
 
+import { FragmentClientComponent } from './fragment-client/fragment-client.component';
 import { ClientModel } from '../../models/client.model';
 
 @Component({
@@ -18,11 +19,24 @@ export class FragmentDashboardComponent implements OnInit {
     //Get clients
     this.client.getClients().subscribe(
       (clients: Array<ClientModel>) => {
-        console.log(clients);
-
         this.clientList = clients;
       }
     )
+  }
+  
+  //This gets called by children
+  deleteClient(event) {
+    this.client.removeClient(event)
+      .subscribe( () => {
+        let index = this.clientList.findIndex(
+          (value: ClientModel, index: number, obj: ClientModel[]): boolean => {
+            if(value._id == event) {
+              return true;
+            }
+          });
+
+        this.clientList.splice(index, 1);
+      });
   }
 
 }

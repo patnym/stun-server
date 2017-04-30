@@ -3,6 +3,6 @@
   <p>Some text..</p>
 
   <div *ngFor="let client of clientList" class="well">
-      <app-fragment-client [model]="client"></app-fragment-client>
+      <app-fragment-client [model]="client" (delete)="deleteClient($event)"></app-fragment-client>
   </div>
 </div>

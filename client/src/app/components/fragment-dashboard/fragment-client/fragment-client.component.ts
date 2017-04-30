@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ClientModel } from '../../../models/client.model';
 
 @Component({
@@ -11,12 +11,17 @@ export class FragmentClientComponent implements OnInit {
 
   model: ClientModel;
 
+  @Output() delete:EventEmitter<string> = new EventEmitter();
+
   isCollapsed: boolean = false;
 
   constructor() { }
 
   ngOnInit() {
-    
+  }
+
+  onDelete() {
+    this.delete.emit(this.model._id);
   }
 
 }

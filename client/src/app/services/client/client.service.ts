@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, URLSearchParams, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { AuthService } from '../authentication/auth.service';
 
@@ -28,7 +28,7 @@ export class ClientService {
             name: element.name,
             port: element.port,
             ip: element.ip,
-            _id: element.id
+            _id: element._id
           })
         });
         
@@ -37,7 +37,7 @@ export class ClientService {
   }
 
   //Create client
-  createClient(name: String) {
+  createClient(name: string) {
     return this.http.post('/api/client', { name: name, token: this.auth.getToken()})
       .map( (data: any) => {
         console.log(data);
@@ -47,6 +47,14 @@ export class ClientService {
           return true;
         }
         return false;
+      });
+  }
+
+  removeClient(id: string) {
+    return this.http.delete('/api/client/' + id + "?token=" + this.auth.getToken())
+      .map( (data: any) => {
+        console.log(data);
+        return true;
       });
   }
 

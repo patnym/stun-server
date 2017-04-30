@@ -2,12 +2,12 @@ Create angular 2 client
 
 TODO:
 * Server
-    * Remove client
+    * Set token in header
     * Role support
     * Potential dynamic routes
 * Client
-    * Remove client
-    * Log out
+    * Set token in header
+    * Update to send correct uri encoded params
     * Role support
     * Register new users
     * Edit user
