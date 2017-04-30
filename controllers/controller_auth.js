@@ -19,6 +19,11 @@ var auth_middleware = (req, res, next) => {
     console.log("middleware used");
     //Get Authorization header
     const header = req.get('authorization');
+    if(!header) {
+        next(ResponseHelper.errorResponse(400, "Missing authorization header"));
+        return;
+    }
+
     //Extract token and type
     const params = header.split(" ");
     //Handle bearer
