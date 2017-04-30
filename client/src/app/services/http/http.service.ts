@@ -8,12 +8,10 @@ export class HttpService {
   constructor(private http : Http) { }
   
   //params should be its own object
-  get(url: string, params?: HttpParams, auth?: string) {
+  get(url: string, params?: HttpParams, token?: string) {
     let formated_url = url + ( params === undefined || params === {} ? params.toString() : "" );
 
-    let options = auth ? this.createAuthHeaderWithOptions(auth) : undefined;
-
-    return this.http.get(formated_url, options);
+    return this.http.get(formated_url, this.createAuthHeaderWithOptions(token));
   }
 
   post(url:string, body?: any, auth?: string) {
@@ -26,6 +24,10 @@ export class HttpService {
 
 
   private createAuthHeaderWithOptions(token: string): RequestOptions {
+    if(!token) {
+      return undefined
+    }
+
     let headers = new Headers();
     headers.append('Authorization', 'Bearer ' + token);
 
