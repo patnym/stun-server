@@ -126,7 +126,6 @@ router.routes.post("/api/login", (req, res, next) => {
  * @apiPermission admin
  * 
  * @apiParam {String} username  Users unique username
- * @apiParam {String} token     Authentication token
  *
  * @apiSuccess {Object} user            User object
  * @apiSuccess {String} user.username   Username
@@ -156,8 +155,6 @@ router.routes.get("/api/user/:username", auth_middleware, (req, res, next) => {
  * @apiGroup User
  *
  * @apiPermission admin
- *
- * @apiParam  {String} token Authentication token
  * 
  * @apiSuccess {Object[]} users         User object
  * @apiSuccess {String} user.username   Username
