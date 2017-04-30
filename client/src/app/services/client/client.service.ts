@@ -1,21 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, URLSearchParams, RequestOptions } from '@angular/http';
+import { Http, Response, URLSearchParams, RequestOptions, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { AuthService } from '../authentication/auth.service';
+
+import { HttpService } from '../http/http.service';
 
 import { ClientModel } from '../../models/client.model';
 
 @Injectable()
 export class ClientService {
 
-  constructor(private auth: AuthService, private http: Http) { }
+  constructor(private auth: AuthService, private http: HttpService) { }
 
   //Get all ClientService
   getClients() {
     //Get token
     let token = this.auth.getToken();
 
-    return this.http.get("/api/clients?token=" + token)
+    return this.http.get("/api/clients", {}, token)
       .map( (data: any): Array<ClientModel> => {
         console.log(data);
 
