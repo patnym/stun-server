@@ -64,7 +64,7 @@ router.middleware = auth_middleware;
  * @apiName Register User
  * @apiGroup User
  *
- * @apiPermission none
+ * @apiPermission admin
  * 
  * @apiParam {String} username Users unique username
  * @apiParam {String} password Users unique password
@@ -78,7 +78,7 @@ router.middleware = auth_middleware;
          username: "foo"
      }
  */
-router.routes.post("/api/user", (req, res, next) => {
+router.routes.post("/api/user", auth_middleware, (req, res, next) => {
     console.log("post /api/user called with params: ", req.body);
 
     //Verify params

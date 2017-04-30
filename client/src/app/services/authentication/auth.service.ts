@@ -8,17 +8,24 @@ export class AuthService {
 
   constructor(private http: HttpService) { }
 
-  login(username: String, password: String) {
+  login(username: string, password: string) {
     return this.http.post('/api/login', { username: username, password: password })
-    .map((response: Response) => {
-        console.log(response); 
-        // login successful if there's a jwt token in the response
-        let user = response.json();
-        if (user && user.token) {
-            // store user details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('currentUser', JSON.stringify(user));
-        }
-    });
+      .map((response: Response) => {
+          console.log(response); 
+          // login successful if there's a jwt token in the response
+          let user = response.json();
+          if (user && user.token) {
+              // store user details and jwt token in local storage to keep user logged in between page refreshes
+              localStorage.setItem('currentUser', JSON.stringify(user));
+          }
+      });
+  }
+
+  createUser(username: string, password: string) {
+    return this.http.post('/api/user', { username: username, password: password }, this.getToken())
+      .map( (data: any) => {
+        console.log(data);
+      });
   }
 
   getToken() {

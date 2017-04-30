@@ -15,6 +15,7 @@ import { FragmentDashboardComponent } from './components/fragment-dashboard/frag
 import { FragmentClientComponent } from './components/fragment-dashboard/fragment-client/fragment-client.component';
 import { FragmentCreateClientComponent } from './components/fragment-create-client/fragment-create-client.component';
 import { HomeComponent } from './components/home/home.component';
+import { FragmentCreateUserComponent } from './components/fragment-create-user/fragment-create-user.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { HomeComponent } from './components/home/home.component';
     FragmentDashboardComponent,
     FragmentClientComponent,
     FragmentCreateClientComponent,
-    HomeComponent
+    HomeComponent,
+    FragmentCreateUserComponent
   ],
   imports: [
     BrowserModule,
