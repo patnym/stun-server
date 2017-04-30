@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import { AuthService } from '../authentication/auth.service';
 
 import { HttpService } from '../http/http.service';
+import { HttpSlashEncodedParamas } from '../http/httpparams';
 
 import { ClientModel } from '../../models/client.model';
 
@@ -40,7 +41,7 @@ export class ClientService {
 
   //Create client
   createClient(name: string) {
-    return this.http.post('/api/client', { name: name, token: this.auth.getToken()})
+    return this.http.post('/api/client', { name: name }, this.auth.getToken())
       .map( (data: any) => {
         console.log(data);
         let client = data.json();
@@ -53,7 +54,10 @@ export class ClientService {
   }
 
   removeClient(id: string) {
-    return this.http.delete('/api/client/' + id + "?token=" + this.auth.getToken())
+    let params = new HttpSlashEncodedParamas();
+    params.setParam("", id);
+
+    return this.http.delete('/api/client', params, this.auth.getToken())
       .map( (data: any) => {
         console.log(data);
         return true;
