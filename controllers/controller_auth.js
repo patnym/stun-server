@@ -9,54 +9,13 @@ const AuthManager = require('../managers/manager_auth');
 //Helpers
 const ResponseHelper = require('../helpers/helper_response');
 const UserHelper = require('../helpers/helper_user');
+const ROLES = require('../helpers/helper_roles');
 
-const router = {};
-router.middleware = express.Router();
-router.routes = express.Router();
+//Middleware
+const auth_middleware = require('../middleware/middleware_auth');
+const role_middleware = require('../middleware/middleware_roles');
 
-//Middleware token validation
-var auth_middleware = (req, res, next) => {
-    console.log("middleware used");
-    //Get Authorization header
-    const header = req.get('authorization');
-    if(!header) {
-        next(ResponseHelper.errorResponse(400, "Missing authorization header"));
-        return;
-    }
-
-    //Extract token and type
-    const params = header.split(" ");
-    //Handle bearer
-    if(params[0].toLowerCase() == "bearer") {
-        
-        const token = params[1];
-
-        if(token){
-            try {
-                jwt.verify(token, jwt_config.key, (err, decoded) => {
-                    if(err) {
-                        next(err);
-                        return;
-                    }
-
-                    console.log("Auth granted payload is: " , decoded);
-                    req.user = decoded.user;
-                    console.log(req.user);
-                    next();
-                });
-            } catch (err) {
-                next(err);
-            }
-        } else {
-            next(ResponseHelper.errorResponse(400, "No token in request"));
-        }
-    } else {
-        next(ResponseHelper.errorResponse(400, "Only handles Bearer type authorization header"));
-    }
-
-}
-
-router.middleware = auth_middleware;
+const router = express.Router();
 
 
 /**
@@ -78,7 +37,7 @@ router.middleware = auth_middleware;
          username: "foo"
      }
  */
-router.routes.post("/api/user", auth_middleware, (req, res, next) => {
+router.post("/api/user", auth_middleware, role_middleware(ROLES.admin), (req, res, next) => {
     console.log("post /api/user called with params: ", req.body);
 
     //Verify params
@@ -112,7 +71,7 @@ router.routes.post("/api/user", auth_middleware, (req, res, next) => {
         token: "123456789abcdefghijklmnopqrstuvwxyz"
      }
  */
-router.routes.post("/api/login", (req, res, next) => {
+router.post("/api/login", (req, res, next) => {
     console.log("post /api/login called params: ", req.body);
 
     AuthManager.authenticateUser(req.body.username, req.body.password)
@@ -124,7 +83,7 @@ router.routes.post("/api/login", (req, res, next) => {
 });
 
 /**
- * @api {get} /api/user/:username?token=:token Get a user by name
+ * @api {get} /api/user/:username Get a user by name
  * @apiName GetUser
  * @apiGroup User
  *
@@ -142,7 +101,7 @@ router.routes.post("/api/login", (req, res, next) => {
          _id: "1"
      }
  */
-router.routes.get("/api/user/:username", auth_middleware, (req, res, next) => {
+router.get("/api/user/:username", auth_middleware, role_middleware(ROLES.admin), (req, res, next) => {
     console.log("get /api/user/:username called username: ", req.params);
 
     AuthManager.getUser(req.params.username)
@@ -155,7 +114,7 @@ router.routes.get("/api/user/:username", auth_middleware, (req, res, next) => {
 });
 
 /**
- * @api {get} /api/users?token=:token Get all users
+ * @api {get} /api/users Get all users
  * @apiName GetUsers
  * @apiGroup User
  *
@@ -179,7 +138,7 @@ router.routes.get("/api/user/:username", auth_middleware, (req, res, next) => {
             ..
          ]
  */
-router.routes.get("/api/users", auth_middleware, (req, res, next) => {
+router.get("/api/users", auth_middleware, role_middleware(ROLES.admin), (req, res, next) => {
     console.log("get /api/users called");
 
     AuthManager.getUsers()
@@ -190,14 +149,14 @@ router.routes.get("/api/users", auth_middleware, (req, res, next) => {
         });
 });
 
-router.routes.put("/api/user", auth_middleware, (req, res) => {
+router.put("/api/user", auth_middleware, role_middleware(ROLES.admin), (req, res) => {
     console.log("put /api/user called params: ", req.body);
     //NOT IMPLEMENTED
     res.status(501).send({error: "User update isnt implmented yet"});
 });
 
 //Delete user
-router.routes.delete("/api/user", auth_middleware, (req, res) => {
+router.delete("/api/user", auth_middleware, role_middleware(ROLES.admin), (req, res) => {
     console.log("delete /api/user called params: ", req.body);
     //NOT IMPLEMENTED
     res.status(501).send({error: "User delete isnt implmented yet"});
