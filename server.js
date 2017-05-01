@@ -24,11 +24,11 @@ app.use('/', express.static(__dirname + '/public'))
  */
 const client_routes = require('./controllers/controller_client');
 const auth_routes = require('./controllers/controller_auth');
-const error_middleware = require('./helpers/helper_route_middleware');
+const error_middleware = require('./middleware/middleware_error');
 
 //Register all unauthorized paths
-app.use(client_routes.routes);
-app.use(auth_routes.routes);
+app.use(client_routes);
+app.use(auth_routes);
 
 //Error middleware
 app.use(error_middleware);

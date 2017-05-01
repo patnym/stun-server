@@ -202,7 +202,8 @@ var auth = class AuthorazatitonManager {
                             //TODO(Nyman): Later we send the role of the user aswell
                             resolve( { token: jwt.sign( 
                                 { 
-                                    user: user._id
+                                    user: user._id,
+                                    role: user.role
                                 }, jwt_config.key) } );
                         }
                     });                

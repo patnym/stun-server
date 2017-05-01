@@ -1,7 +1,5 @@
 const express = require('express');
-const router = {};
-router.routes = express.Router(); //All routes that require no authorization
-var auth_middleware = require('./controller_auth').middleware;
+const router = express.Router(); //All routes that require no authorization
 
 //Managers
 const AuthManager = require('../managers/manager_auth');
@@ -9,6 +7,10 @@ const ClientManager = require('../managers/manager_client');
 
 //Helpers
 const ResponseHelper = require('../helpers/helper_response');
+
+//Middleware
+const auth_middleware = require('../middleware/middleware_auth');
+
 
 //Client model
 const Client = require('../models/model_client');
@@ -39,7 +41,7 @@ const Client = require('../models/model_client');
         ip: "0.0.0.0"
      }
  */
-router.routes.post("/api/client", auth_middleware, (req, res, next) => {
+router.post("/api/client", auth_middleware, (req, res, next) => {
     console.log("/api/register called name: ", req.body.name);      
 
     if(req.body.name === undefined) {
@@ -88,7 +90,7 @@ router.routes.post("/api/client", auth_middleware, (req, res, next) => {
         ip: "0.0.0.0"
      }
  */
-router.routes.put("/api/client", auth_middleware, (req, res, next) => {
+router.put("/api/client", auth_middleware, (req, res, next) => {
     console.log("/api/ping called with body: ", req.body);
 
     ClientManager.updateClientById(req.body.id,
@@ -127,7 +129,7 @@ router.routes.put("/api/client", auth_middleware, (req, res, next) => {
         ip: "0.0.0.0"
      }
  */
-router.routes.get("/api/client/:id", auth_middleware, (req, res, next) => {
+router.get("/api/client/:id", auth_middleware, (req, res, next) => {
     console.log("/api/client/id/:id called id: ", req.params.id);
 
     ClientManager.getClientById(req.params.id)
@@ -173,7 +175,7 @@ router.routes.get("/api/client/:id", auth_middleware, (req, res, next) => {
         ..
      ]
  */
-router.routes.get("/api/clients", auth_middleware, (req, res, next) => {
+router.get("/api/clients", auth_middleware, (req, res, next) => {
     console.log("/api/getclients called");
 
     ClientManager.getClientsByUser(req.user)
@@ -210,7 +212,7 @@ router.routes.get("/api/clients", auth_middleware, (req, res, next) => {
         ip: "0.0.0.0"
     }
  */
-router.routes.delete("/api/client/:id", auth_middleware, (req, res, next) => {
+router.delete("/api/client/:id", auth_middleware, (req, res, next) => {
     console.log("/api/deleteclient/id/:id called id: ", req.params.id);
 
     ClientManager.deleteClientById(req.params.id)
@@ -237,7 +239,7 @@ router.routes.delete("/api/client/:id", auth_middleware, (req, res, next) => {
          status: 200
      } 
  */
-router.routes.post("/api/ping", (req, res, next) => {
+router.post("/api/ping", (req, res, next) => {
     console.log("/api/ping/:id/:token called params: ", req.body);
 
     //Validate token

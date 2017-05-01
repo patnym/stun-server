@@ -9,7 +9,7 @@ var user = mongoose.Schema(
         password: { type: String},
         //email?
         //role?
-
+        role: { type: Number, default: 1 },
         //clients
         clients : [
             { type: mongoose.Schema.Types.ObjectId, ref: 'Client' }
