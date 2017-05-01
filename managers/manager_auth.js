@@ -6,6 +6,7 @@ const jwt_config = require('../configs/token_config');
 const bcrypt_config = require('../configs/bcrypt_config');
 const User = require('../models/model_user');
 const ResponseHelper = require('../helpers/helper_response');
+const ROLES = require('../helpers/helper_roles');
 
 const ClientManager = require('./manager_client');
 
@@ -17,7 +18,7 @@ var auth = class AuthorazatitonManager {
     }
 
     //Create, read, update, delete
-    createUser(username, password) {
+    createUser(username, password, role) {
         return new Promise( (resolve, reject) => {
             //Check if user exists first
             this.getUser(username).then( (user) => {
@@ -35,7 +36,7 @@ var auth = class AuthorazatitonManager {
                         reject(ResponseHelper.errorResponse(500, err.name, err.message, err));
                     } else {
                         //Create user
-                        const user = new User( { username: username, password: hash } ); 
+                        const user = new User( { username: username, password: hash, role: role || ROLES.user } ); 
 
                         user.save( (err, user) => {
                             if(err) {

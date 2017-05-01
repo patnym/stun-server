@@ -71,9 +71,9 @@ var climan = class ClientManager {
                         console.error(err);
                         reject(err);
                     } else {
-                        if(!user && user.clients.length === 0) {
+                        if(!user || user === null && user.clients.length === 0) {
                             console.error(ResponseHelper.errorResponse("No clients found by user"));
-                            reject(ResponseHelper.errorResponse("No clients found by user"));
+                            reject(ResponseHelper.errorResponse(404, "No clients found by user"));
                         } else {
                             resolve(user.clients);
                         }
