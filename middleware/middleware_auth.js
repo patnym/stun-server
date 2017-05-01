@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+const jwt_config = require('../configs/token_config');
 
 //Middleware token validation
 var auth_middleware = (req, res, next) => {

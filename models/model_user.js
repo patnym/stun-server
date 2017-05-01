@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const ROLES = require('../helpers/helper_roles');
 
 var user = mongoose.Schema(
     {
@@ -9,7 +9,7 @@ var user = mongoose.Schema(
         password: { type: String},
         //email?
         //role?
-        role: { type: Number, default: 1 },
+        role: { type: Number, default: ROLES.user },
         //clients
         clients : [
             { type: mongoose.Schema.Types.ObjectId, ref: 'Client' }

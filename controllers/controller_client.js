@@ -7,9 +7,11 @@ const ClientManager = require('../managers/manager_client');
 
 //Helpers
 const ResponseHelper = require('../helpers/helper_response');
+const ROLES = require('../helpers/helper_roles');
 
 //Middleware
 const auth_middleware = require('../middleware/middleware_auth');
+const role_middleware = require('../middleware/middleware_roles');
 
 
 //Client model
@@ -41,7 +43,7 @@ const Client = require('../models/model_client');
         ip: "0.0.0.0"
      }
  */
-router.post("/api/client", auth_middleware, (req, res, next) => {
+router.post("/api/client", auth_middleware, role_middleware(ROLES.user), (req, res, next) => {
     console.log("/api/register called name: ", req.body.name);      
 
     if(req.body.name === undefined) {
@@ -64,11 +66,11 @@ router.post("/api/client", auth_middleware, (req, res, next) => {
 });
 
 /**
- * @api {put} /api/client?token=:token Update an existing client
+ * @api {put} /api/client Update an existing client
  * @apiName UpdateClient
  * @apiGroup Client
  *
- * @apiPermission admin
+ * @apiPermission user
  * 
  * @apiParam {String} name      Client name
  * @apiParam {String} ip        Client ip
@@ -90,7 +92,7 @@ router.post("/api/client", auth_middleware, (req, res, next) => {
         ip: "0.0.0.0"
      }
  */
-router.put("/api/client", auth_middleware, (req, res, next) => {
+router.put("/api/client", auth_middleware, role_middleware(ROLES.user), (req, res, next) => {
     console.log("/api/ping called with body: ", req.body);
 
     ClientManager.updateClientById(req.body.id,
@@ -105,7 +107,7 @@ router.put("/api/client", auth_middleware, (req, res, next) => {
 });
 
 /**
- * @api {get} /api/client/:id?token=:token Get client by id
+ * @api {get} /api/client/:id Get client by id
  * @apiName GetClient
  * @apiGroup Client
  *
@@ -129,7 +131,7 @@ router.put("/api/client", auth_middleware, (req, res, next) => {
         ip: "0.0.0.0"
      }
  */
-router.get("/api/client/:id", auth_middleware, (req, res, next) => {
+router.get("/api/client/:id", auth_middleware, role_middleware(ROLES.user), (req, res, next) => {
     console.log("/api/client/id/:id called id: ", req.params.id);
 
     ClientManager.getClientById(req.params.id)
@@ -141,11 +143,11 @@ router.get("/api/client/:id", auth_middleware, (req, res, next) => {
 });
 
 /**
- * @api {get} /api/clients?token=:token Get all clients
+ * @api {get} /api/clients Get all clients
  * @apiName GetClients
  * @apiGroup Client
  *
- * @apiPermission admin
+ * @apiPermission user
  * 
  * 
  * @apiSuccess {Object[]} clients      Array of Client objects
@@ -175,7 +177,7 @@ router.get("/api/client/:id", auth_middleware, (req, res, next) => {
         ..
      ]
  */
-router.get("/api/clients", auth_middleware, (req, res, next) => {
+router.get("/api/clients", auth_middleware, role_middleware(ROLES.user), (req, res, next) => {
     console.log("/api/getclients called");
 
     ClientManager.getClientsByUser(req.user)
@@ -188,11 +190,11 @@ router.get("/api/clients", auth_middleware, (req, res, next) => {
 });
 
 /**
- * @api {delete} /api/client?token=:token Delete a client
+ * @api {delete} /api/client/:id Delete a client
  * @apiName DeleteClient
  * @apiGroup Client
  *
- * @apiPermission admin
+ * @apiPermission user
  * 
  * @apiParam {String} id        Unique Id
  * 
@@ -212,9 +214,10 @@ router.get("/api/clients", auth_middleware, (req, res, next) => {
         ip: "0.0.0.0"
     }
  */
-router.delete("/api/client/:id", auth_middleware, (req, res, next) => {
+router.delete("/api/client/:id", auth_middleware, role_middleware(ROLES.user), (req, res, next) => {
     console.log("/api/deleteclient/id/:id called id: ", req.params.id);
 
+    //TODO(Nyman): This isnt safe, should get the users client then delete from there, you could potentially delete another useres client here
     ClientManager.deleteClientById(req.params.id)
         .then( (client) => {
             res.json(client);
