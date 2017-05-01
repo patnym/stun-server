@@ -9,9 +9,11 @@ const AuthManager = require('../managers/manager_auth');
 //Helpers
 const ResponseHelper = require('../helpers/helper_response');
 const UserHelper = require('../helpers/helper_user');
+const ROLES = require('../helpers/helper_roles');
 
 //Middleware
 const auth_middleware = require('../middleware/middleware_auth');
+const role_middleware = require('../middleware/middleware_roles');
 
 const router = express.Router();
 
@@ -35,7 +37,7 @@ const router = express.Router();
          username: "foo"
      }
  */
-router.post("/api/user", auth_middleware, (req, res, next) => {
+router.post("/api/user", auth_middleware, role_middleware(ROLES.admin), (req, res, next) => {
     console.log("post /api/user called with params: ", req.body);
 
     //Verify params
@@ -81,7 +83,7 @@ router.post("/api/login", (req, res, next) => {
 });
 
 /**
- * @api {get} /api/user/:username?token=:token Get a user by name
+ * @api {get} /api/user/:username Get a user by name
  * @apiName GetUser
  * @apiGroup User
  *
@@ -99,7 +101,7 @@ router.post("/api/login", (req, res, next) => {
          _id: "1"
      }
  */
-router.get("/api/user/:username", auth_middleware, (req, res, next) => {
+router.get("/api/user/:username", auth_middleware, role_middleware(ROLES.admin), (req, res, next) => {
     console.log("get /api/user/:username called username: ", req.params);
 
     AuthManager.getUser(req.params.username)
@@ -112,7 +114,7 @@ router.get("/api/user/:username", auth_middleware, (req, res, next) => {
 });
 
 /**
- * @api {get} /api/users?token=:token Get all users
+ * @api {get} /api/users Get all users
  * @apiName GetUsers
  * @apiGroup User
  *
@@ -136,7 +138,7 @@ router.get("/api/user/:username", auth_middleware, (req, res, next) => {
             ..
          ]
  */
-router.get("/api/users", auth_middleware, (req, res, next) => {
+router.get("/api/users", auth_middleware, role_middleware(ROLES.admin), (req, res, next) => {
     console.log("get /api/users called");
 
     AuthManager.getUsers()
@@ -147,14 +149,14 @@ router.get("/api/users", auth_middleware, (req, res, next) => {
         });
 });
 
-router.put("/api/user", auth_middleware, (req, res) => {
+router.put("/api/user", auth_middleware, role_middleware(ROLES.admin), (req, res) => {
     console.log("put /api/user called params: ", req.body);
     //NOT IMPLEMENTED
     res.status(501).send({error: "User update isnt implmented yet"});
 });
 
 //Delete user
-router.delete("/api/user", auth_middleware, (req, res) => {
+router.delete("/api/user", auth_middleware, role_middleware(ROLES.admin), (req, res) => {
     console.log("delete /api/user called params: ", req.body);
     //NOT IMPLEMENTED
     res.status(501).send({error: "User delete isnt implmented yet"});
