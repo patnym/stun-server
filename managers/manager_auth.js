@@ -199,7 +199,6 @@ var auth = class AuthorazatitonManager {
                             console.info("Bad password");
                             reject(ResponseHelper.errorResponse(422, "Bad credentials"));
                         } else {
-                            //TODO(Nyman): Later we send the role of the user aswell
                             resolve( { token: jwt.sign( 
                                 { 
                                     user: user._id,
