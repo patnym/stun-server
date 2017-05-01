@@ -144,6 +144,7 @@ var auth = class AuthorazatitonManager {
     }
 
     //Remove a client by id from user by id
+    //DEPRECATED
     removeClient(id, clientId) {
         return new Promise( (resolve, reject) => {
 

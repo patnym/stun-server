@@ -107,8 +107,8 @@ var climan = class ClientManager {
         });
     }
 
-    //delete client
-    deleteClientById(id) {
+    //delete client by id and from user by id
+    deleteClientById(id, userId) {
         return new Promise( (resolve, reject) => {
 
             Client.findByIdAndRemove(id, (err, client) => {
@@ -116,7 +116,15 @@ var climan = class ClientManager {
                     console.error(err);
                     reject(ResponseHelper.errorResponse(500, err.name));
                 } else {
-                    resolve(client);
+                    User.findByIdAndUpdate( userId, { $pull: { clients: client._id } },
+                        (err, user) => {
+                            if(err) {
+                                console.error(err);
+                                reject(ResponseHelper.errorResponse(500, err.name));
+                            } else {
+                                resolve(client);
+                            }
+                        });
                 }
             });
         });
