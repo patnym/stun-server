@@ -218,10 +218,10 @@ router.delete("/api/client/:id", auth_middleware, role_middleware(ROLES.user), (
     console.log("/api/deleteclient/id/:id called id: ", req.params.id);
 
     //TODO(Nyman): This isnt safe, should get the users client then delete from there, you could potentially delete another useres client here
-    ClientManager.deleteClientById(req.params.id)
+    ClientManager.deleteClientById(req.params.id, req.user)
         .then( (client) => {
             res.json(client);
-        }).catch( (reason) => {send
+        }).catch( (reason) => {
             next(reason);
         });
 });
