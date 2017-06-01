@@ -69,7 +69,7 @@ var climan = class ClientManager {
                 .exec( (err, user) => {
                     if(err) {
                         console.error(err);
-                        reject(err);
+                        reject(ResponseHelper.errorResponse(500, err.name, err.message));
                     } else {
                         if(!user || user === null && user.clients.length === 0) {
                             console.error(ResponseHelper.errorResponse("No clients found by user"));
@@ -104,6 +104,23 @@ var climan = class ClientManager {
             }).catch( (reason) => {
                 reject(reason);
             })
+        });
+    }
+
+    pingClient(token, ip, port) {
+        return new Promise( (resolve, reject) => {
+
+            Client.findOneAndUpdate({ auth: token }, { $set: { ip: ip, port: port } },
+                (err, client) => {
+                    if(err) {
+                        console.error(err);
+                        reject(ResponseHelper.errorResponse(500, err.name, err.message));
+                    } else {
+                        console.log(client);
+                        resolve(client);
+                    }
+                });
+
         });
     }
 

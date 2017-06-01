@@ -4,6 +4,7 @@ const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const subdomain = require('express-subdomain');
 
 const AuthManager = require('./managers/manager_auth')
 
@@ -12,6 +13,16 @@ const app = express();
 // Parsers for POST data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+var router = express.Router();
+var httpProxy = require('http-proxy');
+var proxy = httpProxy.createServer();
+
+router.all('*' , (req, res) => {
+    proxy.web(req, res, {target: "http://www.aftonbladet.se", secure: false});
+});
+
+app.use(subdomain('sub', router));
 
 /**
  * Setup statics
@@ -26,7 +37,7 @@ const client_routes = require('./controllers/controller_client');
 const auth_routes = require('./controllers/controller_auth');
 const error_middleware = require('./middleware/middleware_error');
 
-//Register all unauthorized paths
+//Register all  paths
 app.use(client_routes);
 app.use(auth_routes);
 
