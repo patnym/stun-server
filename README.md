@@ -2,7 +2,6 @@ Create angular 2 client
 
 TODO:
 * Server
-    * Role support
     * Potential dynamic routes
 * Client
     * Role support
