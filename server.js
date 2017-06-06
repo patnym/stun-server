@@ -4,6 +4,7 @@ const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const subdomain = require('express-subdomain');
 
 const AuthManager = require('./managers/manager_auth')
 
@@ -13,11 +14,23 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+var httpProxy = require('http-proxy');
+var proxy = httpProxy.createServer();
+
+var router = express.Router();
+
+router.all('*', (req, res) => {
+  proxy.web(req, res, { target: 'http://www.aftonbladet.se' });
+})
+
+app.use(subdomain('proxy', router));
+
 /**
  * Setup statics
  */
 app.use('/help',express.static(__dirname + '/doc'));
-app.use('/', express.static(__dirname + '/public'))
+app.use('/', express.static(__dirname + '/public'));
+
 
 /**
  * Setup routes
@@ -32,12 +45,6 @@ app.use(auth_routes);
 
 //Error middleware
 app.use(error_middleware);
-
-// 404 catch 
-app.all('*', (req , res ) => {
-  console.log(`[TRACE] Server 404 request: ${req.originalUrl}`);
-  res.status(200).sendFile(__dirname + '/public/index.html');
-});
 
 /**
  * Setup DB connection
