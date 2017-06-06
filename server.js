@@ -21,7 +21,7 @@ var router = express.Router();
 
 router.all('*', (req, res) => {
     console.log("WTF IS HAPPENING?!");
-    proxy.web(req, res, { target: 'http://www.aftonbladet.se' });
+    proxy.web(req, res, { target: 'http://144.63.250.10' });
 })
 
 app.use(subdomain('proxy', router));
