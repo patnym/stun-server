@@ -227,12 +227,13 @@ router.delete("/api/client/:id", auth_middleware, role_middleware(ROLES.user), (
 });
 
 /**
- * @api {delete} /api/client?token=:token Ping end-point
+ * @api {post} /api/client?token=:token Ping end-point
  * @apiName PingClient
  * @apiGroup Client
  *
  * @apiPermission client
  * 
+ * @apiParam {String} token Unique client based authentication token
  * @apiParam {String} token Unique client based authentication token
  * 
  * @@apiSuccess {Number} status Status code
@@ -245,14 +246,10 @@ router.delete("/api/client/:id", auth_middleware, role_middleware(ROLES.user), (
 router.post("/api/ping", (req, res, next) => {
     console.log("/api/ping/:id/:token called params: ", req.body);
 
-    //Validate token
-
-
     //Update
-    ClientManager.updateClientById(req.body.id,
-        {   ip: req.body.ip })
+    ClientManager.pingClient(req.body.token, req.body.ip, req.body.port)
         .then( (client) => {
-            res.send({ status: 200 });
+            res.send(client);
         }).catch( (reason) => {
             next(reason);
         });

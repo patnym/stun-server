@@ -20,7 +20,7 @@ var proxy = httpProxy.createServer();
 var router = express.Router();
 
 router.all('*', (req, res) => {
-  proxy.web(req, res, { target: 'http://www.aftonbladet.se' });
+    proxy.web(req, res, { target: 'http://www.aftonbladet.se' });
 })
 
 app.use(subdomain('proxy', router));
@@ -39,7 +39,7 @@ const client_routes = require('./controllers/controller_client');
 const auth_routes = require('./controllers/controller_auth');
 const error_middleware = require('./middleware/middleware_error');
 
-//Register all unauthorized paths
+//Register all  paths
 app.use(client_routes);
 app.use(auth_routes);
 
