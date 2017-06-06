@@ -20,6 +20,7 @@ var proxy = httpProxy.createServer();
 var router = express.Router();
 
 router.all('*', (req, res) => {
+    console.log("WTF IS HAPPENING?!");
     proxy.web(req, res, { target: 'http://www.aftonbladet.se' });
 })
 
