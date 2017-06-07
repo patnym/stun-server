@@ -21,7 +21,7 @@ var router = express.Router();
 
 router.all('*', (req, res) => {
     console.log("WTF IS HAPPENING?!");
-    proxy.web(req, res, { target: 'https://91.208.174.20', secure: false });
+    proxy.web(req, res, { target: 'http://91.208.174.20', secure: false });
 })
 
 app.use(subdomain('proxy', router));
